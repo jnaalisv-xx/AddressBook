@@ -11,6 +11,10 @@ public class AddressBook {
 		this.persons = new Vector<Person>();
 	}
 	
+	private AddressBook(Vector<Person> matches) {
+		this.persons = matches;
+	}
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		
@@ -37,6 +41,20 @@ public class AddressBook {
 			this.persons.add(new Person(lastName, firstName, address, phoneNumber));		
 	}
 
+	public AddressBook search(String string) {
+		Enumeration<Person> enumeration = this.persons.elements();
+		
+		Vector<Person> matches = new Vector<Person>();
+		
+		while(enumeration.hasMoreElements()) {
+			Person p = enumeration.nextElement();			
+			if (p.matches(string))
+				matches.add(p);			
+		}
+
+		return new AddressBook(matches);
+	}
+
 }
 
 class Person {
@@ -53,6 +71,13 @@ class Person {
 		this.phoneNumber = phoneNumber;
 	}
 	
+	public boolean matches(String string) {
+		return this.firstName.contains(string) ||
+			   this.lastName.contains(string) ||
+			   this.phoneNumber.contains(string) ||
+			   this.address.contains(string);
+	}
+
 	public String getLastName() {
 		return this.lastName;
 	}
